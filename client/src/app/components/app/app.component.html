@@ -1,0 +1,11 @@
+<div role="navigation" aria-label="jumplinks">
+  <a href="javascript:void(0)" (click)="jumpTo('content')" class="accessibility">Zum Inhalt springen</a>
+</div>
+
+<app-navigation [component]="component"></app-navigation>
+
+<router-outlet (activate)="component = $event" id="content" class="main-container"></router-outlet>
+
+<footer>
+  © 2018 <abbr title="Business Informatics Group">BIG</abbr> Smart Production
+</footer>

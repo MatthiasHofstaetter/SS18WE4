@@ -1,0 +1,7 @@
+<dl class="device-properties">
+  <dt class="accessibility">Maschinentyp</dt>
+  <dd [id]="'available-title-' + data.type" class="device-type">{{data.title}}</dd>
+</dl>
+<div class="device-image">
+  <img width="100" src="data:" [src]="data.image" [attr.alt]="data.title">
+</div>

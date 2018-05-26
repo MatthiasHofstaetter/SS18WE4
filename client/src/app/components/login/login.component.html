@@ -1,0 +1,35 @@
+<main aria-labelledby="formheadline">
+  <form class="form form-horizontal" #form="ngForm" (submit)="login(form)">
+    <h2 id="formheadline" class="login-headline">Anmelden</h2>
+
+    <div class="form-row">
+      <label class="form-label" for="username-input">Benutzername</label>
+      <input type="text" class="form-input" id="username-input" name="username"
+             placeholder="Benutzername" autocomplete="username" required
+             #username="ngModel" ngModel>
+    </div>
+    <ul *ngIf="username.invalid && username.touched" class="error-text">
+      <li *ngIf="username.errors?.required">Der Benutzername muss angegeben werden.</li>
+    </ul>
+
+    <div class="form-row">
+      <label class="form-label" for="password-input">Passwort</label>
+      <input type="password" class="form-input" id="password-input" name="password"
+             placeholder="Passwort" autocomplete="current-password" required minlength="4" maxlength="12"
+             #password="ngModel" ngModel>
+    </div>
+    <ul *ngIf="password.invalid && password.touched" class="error-text">
+      <li *ngIf="password.errors?.required">Das Passwort muss angegeben werden.</li>
+    </ul>
+
+    <ul *ngIf="serverErrors" class="error-text">
+      <li *ngIf="serverErrors.credentials">Die Zugangsdaten waren ungültig</li>
+    </ul>
+
+    <div class="form-row form-row-center">
+      <button class="button button-submit" [disabled]="form.invalid">Anmelden</button>
+    </div>
+
+    <div *ngIf="errorMessage" class="form-row form-row-center">Fehler: {{errorMessage}}</div>
+  </form>
+</main>

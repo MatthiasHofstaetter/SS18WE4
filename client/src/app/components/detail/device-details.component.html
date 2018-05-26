@@ -1,0 +1,12 @@
+<main aria-labelledby="deviceheadline" class="details">
+  <ng-container *ngIf="device">
+    <h2 id="deviceheadline">{{device.title}}</h2>
+
+    <div class="details-container" [ngSwitch]="device.control.type">
+      <app-boolean-control *ngSwitchCase="ControlType.BOOLEAN" [device]="device"></app-boolean-control>
+      <app-continuous-control *ngSwitchCase="ControlType.CONTINUOUS" [device]="device"></app-continuous-control>
+      <app-enum-control *ngSwitchCase="ControlType.ENUM" [device]="device"></app-enum-control>
+    </div>
+  </ng-container>
+  <p *ngIf="!device">Gerät nicht gefunden.</p>
+</main>

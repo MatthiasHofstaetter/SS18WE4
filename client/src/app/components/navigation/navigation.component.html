@@ -1,0 +1,30 @@
+<header class="bannerheader" aria-labelledby="bannerheadline">
+  <a [routerLink]="loggedIn ? '/overview' : '/login'">
+    <img class="title-image" src="/images/big-logo-small.png" title="BIG Smart Production Logo"
+         alt="BIG Smart Production Logo">
+  </a>
+  <h1 class="header-title" id="bannerheadline">
+    BIG Smart Production
+  </h1>
+  <nav aria-labelledby="navigationheadline">
+    <h2 class="accessibility" id="navigationheadline">Navigation</h2>
+    <ul class="navigation-list">
+      <li class="overflow-icon">
+        <a href="#" class="button" accesskey="1">☰</a>
+      </li>
+      <li class="nav-items">
+        <ul>
+          <li *ngIf="showOverviewLink">
+            <a routerLink="/overview" class="button" accesskey="1">Übersicht</a>
+          </li>
+          <li *ngIf="showOptionsLink">
+            <a routerLink="/options" class="button" accesskey="2">Optionen</a>
+          </li>
+          <li *ngIf="loggedIn">
+            <button (click)="logout()" class="button" accesskey="3">Abmelden</button>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </nav>
+</header>

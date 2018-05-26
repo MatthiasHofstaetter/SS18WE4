@@ -1,0 +1,26 @@
+<div class="details-image-container">
+  <ngx-charts-pie-chart
+    [scheme]="colorScheme"
+    [results]="data"
+    [legend]="true"
+    [labels]="true">
+  </ngx-charts-pie-chart>
+</div>
+<div class="details-control-container">
+  <label class="accessibility" for="details-log">Letzte Werteänderungen</label>
+  <textarea id="details-log" class="details-logs" [ngModel]="log" placeholder="Gerätelog" readonly rows="6"></textarea>
+
+  <div class="details-settings">
+    <h3>{{device.control.title}}</h3>
+
+    <form (submit)="onSubmit()" #form="ngForm">
+      <label class="form-label">derzeit: {{valueToString(device.control.current)}}</label>
+
+      <label class="accessibility" for="value">Bitte gewünschten Wert aus Menü auswählen.</label>
+      <select class="form-input" id="value" name="value" required [(ngModel)]="value">
+        <option *ngFor="let val of device.control.values, index as i" [value]="i">{{val}}</option>
+      </select>
+      <button class="button button-submit" [disabled]="form.invalid">Wert setzen</button>
+    </form>
+  </div>
+</div>

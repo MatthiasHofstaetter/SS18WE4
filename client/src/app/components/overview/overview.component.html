@@ -1,0 +1,38 @@
+<aside class="elements" aria-labelledby="elementsheadline" aria-hidden="true">
+  <h2 id="arrowsheadline">Verfügbare Verbindungen</h2>
+  <ul class="arrow-list">
+    <li class="arrow" aria-labelledby="connector" tabindex="0" title="Verbindung" #arrowAdd>
+      <dl class="arrow-properties">
+        <dt class="accessibility">Elementtyp</dt>
+        <dd id="connector" class="arrow-type">Verbindung</dd>
+      </dl>
+      <div class="arrow-image">
+        <svg width="72px" height="20px">
+          <defs>
+            <marker id="arrow-marker-side" markerWidth="10" markerHeight="10" refY="4" orient="auto">
+              <path d="M0,0 L0,8 L8,4 z" class="arrow-marker"></path>
+            </marker>
+          </defs>
+          <path class="arrow-path" d="M0,10 L56,10" marker-end="url(#arrow-marker-side)"></path>
+        </svg>
+      </div>
+    </li>
+  </ul>
+
+  <h2 id="elementsheadline">Verfügbare Geräte</h2>
+  <ul id="devices" class="device-list draggables">
+    <li app-available-device *ngFor="let device of available | async" [data]="device"></li>
+  </ul>
+</aside>
+
+<main aria-labelledby="diagramheadline">
+  <div class="diagram-header">
+    <h2 class="main-headline" id="diagramheadline">Produktionskette</h2>
+    <div id="counter" class="diagram-header-right">
+      <!-- TODO Implement the product counter -->
+      {{deviceCount | async}} Elemente - {{arrowCount | async}} Pfeile - 0 Produkte
+    </div>
+  </div>
+
+  <app-diagram [arrowAdd]="arrowAdd"></app-diagram>
+</main>

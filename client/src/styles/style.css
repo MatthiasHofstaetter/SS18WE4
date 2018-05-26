@@ -1,0 +1,607 @@
+/*
+ * Global styles
+ */
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+}
+
+app-root {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    min-width: 290px;
+    background: linear-gradient(to bottom, #fbfcfd 0%, #d3d8e8 100%);
+}
+
+body, input, button, select {
+    font-family: Arial, sans-serif;
+    font-size: 15px;
+    color: #333;
+}
+
+.accessibility {
+    position: absolute;
+    top: -9999px;
+    left: -9999px;
+}
+
+/*
+ * Header
+ */
+
+header.bannerheader {
+    padding: 12px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    background: linear-gradient(to bottom, #ffda44 0%, #ff9811 100%);
+    box-shadow: 0 -1px 15px 0 rgba(0, 0, 0, 0.6);
+}
+
+.header-title {
+    margin: 0 0 0 12px;
+    flex: 1;
+}
+
+.navigation-list, .nav-items ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.nav-items li {
+    display: inline-block;
+    width: 105px;
+}
+
+.navigation-list li a {
+    text-align: center;
+    padding: 12px;
+}
+
+.overflow-icon {
+    display: none;
+}
+
+.overflow-icon .button {
+    width: 44px;
+}
+
+/*
+ * Footer
+ */
+
+footer {
+    text-align: center;
+    padding: 12px;
+}
+
+/*
+ * Main content structure
+ */
+
+.main-container + * {
+    padding: 12px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-self: center;
+}
+
+.elements {
+    display: none;
+}
+
+/*
+ * Forms
+ */
+
+.form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.form .error-text {
+    margin: 0;
+    font-size: 0.8em;
+    color: red;
+}
+
+.form-row {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 8px 0;
+}
+
+.form-row-center {
+    justify-content: center;
+    flex-direction: row;
+}
+
+.form-row-right {
+    justify-content: flex-end;
+    flex-direction: row;
+}
+
+.form-label {
+    margin-bottom: 4px;
+    font-weight: bold;
+}
+
+.form-horizontal .form-label:after {
+    content: ":";
+}
+
+.form-input {
+    height: 34px;
+    width: 100%;
+    background: #fff;
+    border: 1px solid #ccc;
+    padding: 4px 6px;
+    border-radius: 5px;
+}
+
+.button {
+    display: block;
+    padding: 12px 20px;
+    color: #fff;
+    text-decoration: none;
+    cursor: pointer;
+    border-radius: 5px;
+    border: 1px solid #275389;
+    background: linear-gradient(to bottom, #1883AF 0%, #275389 100%);
+}
+
+.button:hover, .button:focus, .button:active {
+    background: linear-gradient(to bottom, #1883AF 0%, #194AB2 50%);
+}
+
+.button:disabled {
+    color: #333;
+    border: 1px solid #999;
+    background: linear-gradient(to bottom, #ccc 0%, #999 100%);
+    cursor: default;
+}
+
+.form-horizontal .button-submit {
+    flex-basis: 100%;
+}
+
+/*
+ * Overview page
+ */
+
+.diagram-header {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: baseline;
+}
+
+.diagram-header-right {
+    margin-bottom: 20px;
+    color: #777;
+    font-weight: bold;
+    white-space: nowrap;
+}
+
+.arrows {
+    display: none;
+}
+
+.device-list, .arrow-list {
+    list-style: none;
+    margin: -5px;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: stretch;
+}
+
+.device-list:after, .arrow-list:after {
+    content: "";
+    flex: 1 50%;
+}
+
+.device, .arrow {
+    margin: 5px;
+    flex: 1 calc(50% - 10px);
+    min-width: 235px;
+    overflow: hidden;
+    display: flex;
+    box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.3);
+    border-radius: 5px;
+}
+
+.device:hover, .arrow:hover {
+    color: #006BAC;
+}
+
+.arrow {
+    cursor: pointer;
+}
+
+.arrow:hover, .arrow.active {
+    box-shadow: 0 0 16px 0 #ff9811;
+    outline: none;
+}
+
+.device:hover {
+    box-shadow: 0 0 8px 0 #003B7C;
+}
+
+.draggables .device {
+    cursor: move;
+}
+
+.device-image {
+    padding: 20px;
+    display: block;
+    width: 100px;
+    max-height: 100px;
+    flex-shrink: 0;
+    align-self: center;
+}
+
+.device-image img {
+    max-width: 100%;
+}
+
+.device-properties, .arrow-properties {
+    margin: 0;
+    padding: 9px 14px;
+    flex-grow: 1;
+    order: 2;
+    background: #fff;
+}
+
+.device-properties dt, .arrow-properties dt {
+    margin-top: 5px;
+}
+
+.device-properties dd, .arrow-properties dd {
+    margin: 0;
+}
+
+.device-properties .device-type, .device-properties .device-name,
+.arrow-properties .arrow-type, .arrow-properties .arrow-name {
+    font-size: 1.3em;
+}
+
+.device-controls {
+    display: none;
+}
+
+/*
+ * Arrows
+ */
+
+.arrow-device-add {
+    display: none;
+}
+
+.arrow-image {
+    padding: 14px;
+}
+
+.arrow-path-added {
+    cursor: pointer;
+}
+
+/*
+ * Context menu
+ */
+.contextMenu {
+    position: absolute;
+    min-width: 160px;
+    min-height: 50px;
+    margin: 2px 0 0;
+    background-color: #fff;
+    background-clip: padding-box;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, .175);
+    border: 1px solid rgba(0, 0, 0, .15);
+    border-radius: 4px;
+    display: none;
+}
+
+.contextMenu ul {
+    list-style: none;
+    margin: 0;
+    padding: 5px 0;
+}
+
+.contextMenu li a {
+    display: block;
+    padding: 5px 20px;
+    text-decoration: none;
+    color: #333;
+    white-space: nowrap;
+}
+
+.contextMenu li a:hover {
+    background-color: #f5f5f5;
+}
+
+.device-edit, .device-remove {
+    width: 16px;
+    height: 16px;
+    border: 0;
+}
+
+/*
+ * Options page
+ */
+
+.options-headline {
+    font-size: 2em;
+}
+
+/*
+ * Horizontal alignment for forms
+ */
+
+@media (min-width: 400px) {
+    .form-horizontal .form-row {
+        flex-direction: row;
+        align-items: center;
+    }
+
+    .form-horizontal .button-submit {
+        flex-basis: 55%;
+    }
+
+    .form-horizontal .form-label {
+        margin: 0;
+    }
+
+    .form-horizontal .form-input {
+        flex-basis: 50%;
+    }
+}
+
+/**
+ * Hamburger menu for small screens
+ */
+
+@media (max-width: 629px) {
+    .overflow-icon {
+        display: block;
+    }
+
+    .navigation-list {
+        position: relative;
+    }
+
+    .nav-items {
+        display: none;
+        position: absolute;
+        right: 0;
+        z-index: 1;
+        min-width: 160px;
+        padding: 5px;
+        box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+        background: rgba(255, 255, 255, 0.8);
+        border-radius: 5px;
+    }
+
+    .nav-items li {
+        width: 100%;
+    }
+
+    .nav-items li:not(:last-child) {
+        margin-bottom: 5px;
+    }
+
+    .navigation-list:hover .nav-items, .navigation-list:focus-within .nav-items {
+        display: block;
+    }
+}
+
+/*
+ * Responsive main container
+ */
+
+@media (max-width: 767px) {
+    .main-container + * {
+        width: 100%;
+        max-width: 749px;
+    }
+}
+
+@media (min-width: 768px) {
+    .elements {
+        display: block;
+        padding-bottom: 12px;
+        border-bottom: 1px solid #ccc;
+    }
+
+    .elements, main {
+        width: 725px;
+    }
+
+    .diagram {
+        position: relative;
+        border: 1px solid #ccc;
+        width: 100%;
+        height: 550px;
+        background: rgba(255, 255, 255, 0.5);
+    }
+
+    .arrows, .arrows > svg {
+        display: block;
+        width: 100%;
+        height: 100%;
+    }
+
+    .arrow-marker {
+        fill: #2d2d30;
+    }
+
+    .arrow-path {
+        stroke: #2d2d30;
+        stroke-width: 0.125em;
+        marker-end: url(#arrow-marker);
+    }
+
+    .arrow-marker-active {
+        fill: #ff9811;
+    }
+
+    .arrow-path-added:hover, .arrow-path-added.active {
+        stroke: #ff9811;
+        stroke-width: 0.2em;
+        marker-end: url(#arrow-marker-active);
+    }
+
+    .diagram .device {
+        position: absolute;
+        margin: 0;
+        box-shadow: none;
+        cursor: pointer;
+        min-width: 0;
+    }
+
+    .diagram .device.active {
+        transform: scale(1.1, 1.1);
+        border: 2px solid #ff9811;
+        outline: none;
+    }
+
+    .diagram .arrow-device-add {
+        display: block;
+        position: absolute;
+        right: 0;
+        bottom: 0;
+        width: 24px;
+        height: 24px;
+        line-height: 1;
+        padding: 2px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        background-color: #fff;
+        cursor: pointer;
+    }
+
+    .arrow-device-add:hover {
+        border: 1px solid #ff9811;
+    }
+
+    .diagram .device-image, .device-image.ui-draggable-dragging {
+        padding: 0;
+    }
+
+    .diagram .device-properties {
+        display: none;
+    }
+
+    .device-controls {
+        display: flex;
+        margin: 10px -10px 0;
+        flex-wrap: wrap;
+    }
+
+    .device-controls .form-row {
+        padding: 10px;
+        flex: 0 25%;
+    }
+
+    .device-controls .sub {
+        display: block;
+        font-size: 0.8em;
+    }
+
+    .device-update {
+        justify-content: flex-end;
+    }
+
+    .device-update .button {
+        padding: 12px;
+        width: 100%;
+    }
+}
+
+@media (min-width: 1024px) {
+    .main-container + * {
+        flex-direction: row;
+    }
+
+    .elements {
+        width: auto;
+        max-width: 500px;
+        margin-left: 12px;
+        padding-left: 12px;
+        flex: 1 1;
+        order: 2;
+        border-left: 1px solid #ccc;
+        border-bottom: 0;
+    }
+}
+
+/*
+ * Additional styles for details view
+ */
+
+.details-container {
+    box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.3);
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.details-image-container {
+    overflow: hidden;
+    height: 300px;
+    margin: 10px;
+}
+
+.details-control-container {
+    background: #ffffff;
+    padding: 10px;
+    display: flex;
+    flex-direction: column-reverse;
+}
+
+.details-logs {
+    flex-basis: 50%;
+}
+
+.details-settings {
+    flex-basis: 50%;
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 15px;
+    justify-content: space-between;
+}
+
+.details-settings h3 {
+    margin: 5px 0 15px;
+}
+
+.details-settings .form-input {
+    margin: 5px 0;
+}
+
+.details-settings .button-submit {
+    width: 100%;
+}
+
+@media (min-width: 1024px) {
+    main.details {
+        width: 984px;
+    }
+
+    .details-control-container {
+        flex-direction: row;
+    }
+
+    .details-settings {
+        padding-bottom: 0;
+        padding-left: 10px;
+    }
+}

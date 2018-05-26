@@ -1,0 +1,39 @@
+<div class="diagram" #diagram>
+  <div class="arrows">
+    <svg>
+      <defs>
+        <marker id="arrow-marker" markerWidth="10" markerHeight="10" refX="7" refY="4"
+                orient="auto">
+          <path d="M0,0 L0,8 L8,4 z" class="arrow-marker"></path>
+        </marker>
+        <marker id="arrow-marker-active" markerWidth="10" markerHeight="10" refX="7" refY="4"
+                orient="auto">
+          <path d="M0,0 L0,8 L8,4 z" class="arrow-marker-active"></path>
+        </marker>
+      </defs>
+    </svg>
+  </div>
+  <ul class="devices device-list"></ul>
+</div>
+
+<div class="arrow-device-add" #arrowReference>
+  <svg width="18px" height="8px">
+    <defs>
+      <marker id="arrow-marker-add" markerWidth="10" markerHeight="10" refY="4" orient="auto">
+        <path d="M0,0 L0,8 L8,4 z" class="arrow-marker"></path>
+      </marker>
+    </defs>
+    <path d="M0,4 L16,4" class="arrow-path" marker-end="url(#arrow-marker-add)" style="stroke-width: 1px"></path>
+  </svg>
+</div>
+
+<div class="contextMenu" #contextMenu>
+  <ul>
+    <li><a href="#" class="contextView">
+      <img class="device-edit" src="images/edit.png" alt="Gerät anzeigen"> Detailseite
+    </a></li>
+    <li><a href="#" class="contextDelete">
+      <img class="device-remove" src="images/remove.png" alt="Gerät löschen"/> Löschen
+    </a></li>
+  </ul>
+</div>

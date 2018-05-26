@@ -1,0 +1,48 @@
+<main aria-labelledby="formheadline">
+  <form class="form form-horizontal" #form="ngForm" (submit)="changePassword(form)">
+    <h2 id="formheadline" class="options-headline">Passwort ändern</h2>
+
+    <div class="form-row">
+      <label class="form-label" for="old-password-input">Altes Passwort</label>
+      <input type="password" class="form-input" id="old-password-input" name="oldPassword"
+             placeholder="Altes Passwort" autocomplete="current-password" required
+             #oldPassword="ngModel" ngModel>
+    </div>
+    <ul *ngIf="(oldPassword.invalid && oldPassword.touched) || serverErrors?.oldPassword" class="error-text">
+      <li *ngIf="oldPassword.errors?.required">Das alte Passwort muss angegeben werden.</li>
+      <li *ngIf="serverErrors?.oldPassword">Das alte Passwort war inkorrekt.</li>
+    </ul>
+
+    <div class="form-row">
+      <label class="form-label" for="new-password-input">Neues Passwort</label>
+      <input type="password" class="form-input" id="new-password-input" name="newPassword"
+             placeholder="Neues Passwort" autocomplete="new-password" required minlength="8" maxlength="12"
+             pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).*" #newPassword="ngModel" ngModel
+             title="8-12 Zeichen, jeweils mindestens ein Großbuchstabe, Kleinbuchstabe und eine Zahl">
+    </div>
+    <ul *ngIf="newPassword.invalid && newPassword.touched" class="error-text">
+      <li *ngIf="newPassword.errors?.required">Das neue Passwort muss angegeben werden.</li>
+      <li *ngIf="newPassword.errors?.minlength">Das neue Passwort muss 8 bis 12 Zeichen enthalten.</li>
+      <li *ngIf="newPassword.errors?.pattern">
+        Das neue Passwort muss zumindest jeweils einen Großbuchstaben, Kleinbuchstaben und eine Zahl enthalten.
+      </li>
+    </ul>
+
+    <div class="form-row">
+      <label class="form-label" for="repeat-password-input">Passwort wiederholen</label>
+      <input type="password" class="form-input" id="repeat-password-input" name="repeatPassword"
+             placeholder="Neues Passwort wiederholen" autocomplete="new-password" [confirm]="newPassword"
+             #repeatPassword="ngModel" ngModel>
+    </div>
+    <ul *ngIf="repeatPassword.invalid && repeatPassword.touched" class="error-text">
+      <li *ngIf="repeatPassword.errors?.confirm">Die Passwörter stimmen nicht überein.</li>
+    </ul>
+
+    <div class="form-row form-row-center">
+      <button class="button button-submit" [disabled]="form.invalid">Änderung speichern</button>
+    </div>
+
+    <div *ngIf="success" class="form-row form-row-center">Das Passwort wurde geändert.</div>
+    <div *ngIf="errorMessage" class="form-row form-row-center">Fehler: {{errorMessage}}</div>
+  </form>
+</main>

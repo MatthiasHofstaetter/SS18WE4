@@ -1,0 +1,32 @@
+<div class="details-image-container">
+  <ngx-charts-line-chart
+    [scheme]="colorScheme"
+    [results]="data"
+    [xAxisLabel]="xAxisLabel"
+    [yAxisLabel]="yAxisLabel"
+    [xAxis]="true"
+    [yAxis]="true"
+    [legend]="true"
+    [tooltipDisabled]="true"
+    [showXAxisLabel]="true"
+    [showYAxisLabel]="true"
+    [autoScale]="true">
+  </ngx-charts-line-chart>
+</div>
+<div class="details-control-container">
+  <label class="accessibility" for="details-log">Letzte Werteänderungen</label>
+  <textarea id="details-log" class="details-logs" [ngModel]="log" placeholder="Gerätelog" readonly rows="6"></textarea>
+
+  <div class="details-settings">
+    <h3>{{device.control.title}}</h3>
+
+    <form (submit)="onSubmit()" #form="ngForm">
+      <label class="form-label">derzeit: {{device.control.current}}</label>
+
+      <label class="accessibility" for="value">Bitte gewünschten Wert eingeben.</label>
+      <input type="number" class="form-input" id="value" name="value" step="1"
+             [min]="device.control.min" [max]="device.control.max" required [(ngModel)]="value">
+      <button class="button button-submit" [disabled]="form.invalid">Wert setzen</button>
+    </form>
+  </div>
+</div>
