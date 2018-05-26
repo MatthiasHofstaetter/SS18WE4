@@ -152,8 +152,19 @@
      * Verifies the JWT token which was 
      * sent in the http request header
      */
-    function verifyJWT(){
-        let authorizationHeader = req.get('Authorization')
+    function verifyJWT(req){
+        let authorizationHeader = req.get('Authorization'); //bearer --token--
+        let token = authorizationHeader.split(" ")[1];
+        console.log("jwt: "+token);
+
+        if(token != 'null') //afte login; there is no token set by now, or new token needs to be requested
+        {    
+            let decodedToken = jwt.verify(token,'secret');
+        }
+
+        //console.log("verified User: "+decodedToken.data+" sucessfully.");
+
+      
 
     }
 
@@ -164,6 +175,8 @@
      */
     function authenticate(req, res) {
     
+        verifyJWT(req);
+
         const username = req.body.username, password = req.body.password;
         let jwt;
         if (!user) {

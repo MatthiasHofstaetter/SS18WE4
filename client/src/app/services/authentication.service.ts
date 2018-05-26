@@ -15,17 +15,29 @@ export class AuthenticationService {
   }
 
   login(username: string, password: string): Observable<any> {
+
+    let newTokenRequired = false;
+    //check if token is still valid
+    if(this.sessionStorageService.jwtExpired())
+    {
+          console.log("token expired!");
+          newTokenRequired = true;
+          this.sessionStorageService.setJWT(null);
+         
+    }
+
+
     let val= this.restClient.authenticate({
       username: username, password: password
     }).map(response => {
 
-      //check if token is still valid
-      if(this.sessionStorageService.jwtExpired())
-      {
-        //save new token from response
+      if(newTokenRequired) //new token from response gets saved in localstorage
         this.sessionStorageService.setJWT(response.token);
-      }
+
       this.sessionStorageService.setLoggedIn(true)});
+
+      //testwise:
+      console.log("current token: "+this.sessionStorageService.getJWt());
 
     return val;
   }
