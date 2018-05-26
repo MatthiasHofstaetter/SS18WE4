@@ -19,7 +19,6 @@ export class AuthenticationService {
       username: username, password: password
     }).map(response => {
 
-      this.sessionStorageService.jwtExpired();
       //check if token is still valid
       if(this.sessionStorageService.jwtExpired())
       {

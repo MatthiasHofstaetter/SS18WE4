@@ -24,6 +24,8 @@
     app.use(bodyParser.json());
     app.use(cors());
 
+
+    //todo: before every function called by Rest check token in authentication header
     app.get("/devices/available", getAvailable);
     app.post("/authentication", authenticate);
     app.put("/password", changePassword);
@@ -147,11 +149,21 @@
     }
 
     /**
+     * Verifies the JWT token which was 
+     * sent in the http request header
+     */
+    function verifyJWT(){
+        let authorizationHeader = req.get('Authorization')
+
+    }
+
+    /**
      * Authenticate the user specified in the request
      * @param req The request
      * @param res The response
      */
     function authenticate(req, res) {
+    
         const username = req.body.username, password = req.body.password;
         let jwt;
         if (!user) {
