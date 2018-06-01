@@ -10,6 +10,7 @@ import {AvailableDevice, Control, LogEntry} from '../models';
 import {DeviceClient} from '../rest';
 import '../models/arrow.model';
 import '../models/device.model';
+import {SessionStorageService} from './session-storage.service';
 
 @Injectable()
 export class DeviceService {
@@ -19,7 +20,7 @@ export class DeviceService {
   private readonly logUpdates: Subject<LogUpdate<any>>;
   private webSocket:WebSocket;
 
-  constructor(private readonly deviceClient: DeviceClient) {
+  constructor(private readonly deviceClient: DeviceClient, private readonly sessionStorageService: SessionStorageService) {
     this.devices = new ReplaySubject();
     this.arrows = new ReplaySubject();
 
@@ -46,7 +47,7 @@ export class DeviceService {
       console.log("server sent message via socket!");
     }
     this.webSocket.onopen = function(evt){
-      this.send("Client subscribes");
+      //this.send(JSON.stringify("{msg: client opened}"));
     }.bind(this.webSocket);
 
   }
@@ -109,10 +110,11 @@ export class DeviceService {
   updateDevice<T>(device: Device<Control<T>>, value: T): void {
     // TODO Send updated values to server via WebSocket
     //this.webSocket.send(JSON.parse("{data:bruh}"));
-
+    
     this.webSocket.send(JSON.stringify({
       index: device.index,
-      updateValue: value
+      updateValue: value,
+      jwt: this.sessionStorageService.getJWt()
     }));
     this.setDeviceValue(device, value);
   }

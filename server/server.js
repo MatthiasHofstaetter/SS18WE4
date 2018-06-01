@@ -45,19 +45,19 @@
         console.log("client verbunden");
         console.log("devices: "+devices);
 
+
         //callback functions:
         ws.on('message',(msg,flags)=>{
-
-           // let msgStr = JSON.stringify(msg.data);
-           // let msgJson = JSON.parse(msgStr);
-
-
-            console.log("msg.data: "+msg.data);
-            console.log("msg: "+msg);
-           // console.log("message was sent: "+msgJson.index);
-           // console.log("message was sent: "+msgJson);
             
-            //var data = JSON.parse(msg.data);
+            let msgJson = JSON.parse(msg);
+
+            console.log("update index: "+msgJson.index);
+            console.log("update value: "+msgJson.updateValue);
+
+            //verify message
+            verifyJWT(msgJson.jwt);
+            
+            updateDevice(msgJson.index,msgJson.updateValue);
             //broadcast reply
             updateThing.clients.forEach((client)=>{
                 //client.send(JSON.stringify(data));
@@ -81,6 +81,11 @@
         } else {
             res.status(200).json(available);
         }
+    }
+
+    function updateDevice(index, updateValue){
+        console.log("current: "+ devices[index].control.current);
+        devices[index].control.current = updateValue;
     }
 
     /**
@@ -182,19 +187,14 @@
      * Verifies the JWT token which was 
      * sent in the http request header
      */
-    function verifyJWT(req){
-        let authorizationHeader = req.get('Authorization'); //bearer --token--
-        let token = authorizationHeader.split(" ")[1];
+    function verifyJWT(token){
+       
         console.log("jwt: "+token);
 
         if(token != 'null') //afte login; there is no token set by now, or new token needs to be requested
         {    
             let decodedToken = jwt.verify(token,'secret');
         }
-
-        //console.log("verified User: "+decodedToken.data+" sucessfully.");
-
-      
 
     }
 
@@ -205,7 +205,9 @@
      */
     function authenticate(req, res) {
     
-        verifyJWT(req);
+        let authorizationHeader = req.get('Authorization'); //bearer --token--
+        let token = authorizationHeader.split(" ")[1];
+        verifyJWT(token);
 
         const username = req.body.username, password = req.body.password;
         let jwt;
