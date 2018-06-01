@@ -15,6 +15,7 @@
     const jwt = require("jsonwebtoken");
     const cors = require("cors");
     const simulation = require("./simulation.js");
+    const expressWs = require('express-ws')(app);
 
     let user;
     let available;
@@ -38,6 +39,35 @@
     app.delete("/devices/:predecessor/successors/:successor", deleteSuccessor);
 
     // TODO Create a WebSocket that clients can connect to
+    var updateThing = expressWs.getWss('/updateDevices'); //leave out path to broadcast to all clients
+
+    app.ws('/updateDevices',function(ws,req){
+        console.log("client verbunden");
+        console.log("devices: "+devices);
+
+        //callback functions:
+        ws.on('message',(msg,flags)=>{
+
+           // let msgStr = JSON.stringify(msg.data);
+           // let msgJson = JSON.parse(msgStr);
+
+
+            console.log("msg.data: "+msg.data);
+            console.log("msg: "+msg);
+           // console.log("message was sent: "+msgJson.index);
+           // console.log("message was sent: "+msgJson);
+            
+            //var data = JSON.parse(msg.data);
+            //broadcast reply
+            updateThing.clients.forEach((client)=>{
+                //client.send(JSON.stringify(data));
+                client.send("hallo vom server!");
+            });
+        });
+    });
+
+   
+
     // TODO Check validity of JWT tokens on requests
 
     /**

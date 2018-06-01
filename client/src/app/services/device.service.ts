@@ -17,6 +17,7 @@ export class DeviceService {
   private readonly devices: Subject<Device<any>[]>;
   private readonly arrows: Subject<Arrow[]>;
   private readonly logUpdates: Subject<LogUpdate<any>>;
+  private webSocket:WebSocket;
 
   constructor(private readonly deviceClient: DeviceClient) {
     this.devices = new ReplaySubject();
@@ -40,6 +41,14 @@ export class DeviceService {
     this.logUpdates = new Subject();
 
     // TODO Create a WebSocket and subscribe to incoming messages
+    this.webSocket = new WebSocket("ws://localhost:8081/updateDevices");
+    this.webSocket.onmessage = function(){
+      console.log("server sent message via socket!");
+    }
+    this.webSocket.onopen = function(evt){
+      this.send("Client subscribes");
+    }.bind(this.webSocket);
+
   }
 
   getAvailable(): Observable<AvailableDevice[]> {
@@ -99,6 +108,12 @@ export class DeviceService {
 
   updateDevice<T>(device: Device<Control<T>>, value: T): void {
     // TODO Send updated values to server via WebSocket
+    //this.webSocket.send(JSON.parse("{data:bruh}"));
+
+    this.webSocket.send(JSON.stringify({
+      index: device.index,
+      updateValue: value
+    }));
     this.setDeviceValue(device, value);
   }
 
