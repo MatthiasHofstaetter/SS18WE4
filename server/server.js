@@ -55,7 +55,13 @@
             console.log("update value: "+msgJson.updateValue);
 
             //verify message
-            verifyJWT(msgJson.jwt);
+            if(!verifyJWT(msgJson.jwt))
+            {
+                console.log("token invalid");
+            }
+            else{
+                console.log("token at update valid!")
+            }
             
             updateDevice(msgJson.index,msgJson.updateValue);
             //broadcast reply
@@ -189,12 +195,20 @@
      */
     function verifyJWT(token){
        
-        console.log("jwt: "+token);
-
+        console.log("jwt before verify: "+token);
+        let valid = true;
         if(token != 'null') //afte login; there is no token set by now, or new token needs to be requested
         {    
+            try{
             let decodedToken = jwt.verify(token,'secret');
+            }catch(err){
+                console.log("token invalid: "+err.name);
+                console.log("token invalid: "+err.message);
+                valid = false;
+            }
+            console.log("token valid.")
         }
+        return valid;
 
     }
 
@@ -204,10 +218,16 @@
      * @param res The response
      */
     function authenticate(req, res) {
-    
+
+        /* todo: gehört in jede methode außer authenticate
         let authorizationHeader = req.get('Authorization'); //bearer --token--
         let token = authorizationHeader.split(" ")[1];
-        verifyJWT(token);
+        if(! verifyJWT(token))
+        {
+           // res.status(500).json({message: "token invalid"});
+           console.log('token on server invalid.');
+        }
+        */
 
         const username = req.body.username, password = req.body.password;
         let jwt;
@@ -219,6 +239,9 @@
             res.status(401).json({message: "Bad credentials", errors: {credentials: true}});
         } else {
             jwt = createJWT(username);
+            console.log("verify gleich nach erzeugung von jwt am server in authenticate:");
+            verifyJWT(jwt);
+
             console.log('Json Web Token: '+jwt);
             res.status(200).json({message: "Successfully logged in", token: jwt});
         }
