@@ -39,7 +39,7 @@
     app.delete("/devices/:predecessor/successors/:successor", deleteSuccessor);
 
     // TODO Create a WebSocket that clients can connect to
-    var updateThing = expressWs.getWss('/updateDevices'); //leave out path to broadcast to all clients
+    const updateWss = expressWs.getWss('/updateDevices'); //leave out path to broadcast to all clients
 
     app.ws('/updateDevices',function(ws,req){
         console.log("client verbunden");
@@ -64,11 +64,8 @@
             }
             
             updateDevice(msgJson.index,msgJson.updateValue);
-            //broadcast reply
-            updateThing.clients.forEach((client)=>{
-                //client.send(JSON.stringify(data));
-                client.send("hallo vom server!");
-            });
+            
+           
         });
     });
 
@@ -92,6 +89,9 @@
     function updateDevice(index, updateValue){
         console.log("current: "+ devices[index].control.current);
         devices[index].control.current = updateValue;
+
+        //propagate new device values to all clients
+        sendUpdatedValue(index,updateValue);
     }
 
     /**
@@ -286,6 +286,16 @@
      */
     function sendUpdatedValue(index, value) {
         // TODO Send the data to connected WebSocket clients
+        console.log("Send Updated value Called: "+index+","+value);
+         //broadcast reply
+         updateWss.clients.forEach((client)=>{
+            //client.send(JSON.stringify(data));
+            client.send(JSON.stringify({
+                index: index,
+                updateValue: value
+              }));
+        });
+
     }
 
     /**

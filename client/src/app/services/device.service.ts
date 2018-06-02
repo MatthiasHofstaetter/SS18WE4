@@ -43,9 +43,16 @@ export class DeviceService {
 
     // TODO Create a WebSocket and subscribe to incoming messages
     this.webSocket = new WebSocket("ws://localhost:8081/updateDevices");
-    this.webSocket.onmessage = function(){
-      console.log("server sent message via socket!");
-    }
+    this.webSocket.onmessage = function(msg){
+      let msgJson = JSON.parse(msg.data);
+
+            console.log("update index: "+msgJson.index);
+            console.log("update value: "+msgJson.updateValue);
+            this.getDevice(msgJson.index).subscribe(updateDevice =>{
+              updateDevice.control.current = msgJson.updateValue;
+              updateDevice.updateDevice();
+            });
+    }.bind(this);
     this.webSocket.onopen = function(evt){
       //this.send(JSON.stringify("{msg: client opened}"));
     }.bind(this.webSocket);
