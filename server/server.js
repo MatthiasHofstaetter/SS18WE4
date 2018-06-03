@@ -69,6 +69,17 @@
         });
     });
 
+    function requestJWTValid(req){
+        let authorizationHeader = req.get('Authorization'); //bearer --token--
+        let token = authorizationHeader.split(" ")[1];
+        if(! verifyJWT(token))
+        {
+            return false;
+        }
+        else{
+            return true;
+        }
+    }
    
 
     // TODO Check validity of JWT tokens on requests
@@ -79,6 +90,14 @@
      * @param res The response
      */
     function getAvailable(req, res) {
+
+        if(! requestJWTValid)
+        {
+            res.status(500).json({message: "token invalid"});
+            console.log('token on server invalid.');
+        }
+        
+
         if (!available) {
             res.status(500).json({message: "Devices not loaded"});
         } else {
@@ -100,6 +119,11 @@
      * @param res The response
      */
     function getDevices(req, res) {
+        if(! requestJWTValid)
+        {
+            res.status(500).json({message: "token invalid"});
+            console.log('token on server invalid.');
+        }
         res.status(200).json(Object.keys(devices).map(index => devices[index]));
     }
 
@@ -109,6 +133,13 @@
      * @param res The response
      */
     function addDevice(req, res) {
+
+        if(! requestJWTValid)
+        {
+            res.status(500).json({message: "token invalid"});
+            console.log('token on server invalid.');
+        }
+
         if (devices[req.body.index]) {
             res.status(415).json({message: "Device already exists"});
         } else {
@@ -130,6 +161,12 @@
      * @param res The response
      */
     function deleteDevice(req, res) {
+        if(! requestJWTValid)
+        {
+            res.status(500).json({message: "token invalid"});
+            console.log('token on server invalid.');
+        }
+
         if (!devices[req.params.index]) {
             res.status(404).json({message: "Device does not exist"});
         } else {
@@ -145,6 +182,12 @@
      * @param res The response
      */
     function moveDevice(req, res) {
+        if(! requestJWTValid)
+        {
+            res.status(500).json({message: "token invalid"});
+            console.log('token on server invalid.');
+        }
+
         if (!devices[req.params.index]) {
             res.status(404).json({message: "Device does not exist"});
         } else {
@@ -159,6 +202,13 @@
      * @param res The response
      */
     function addSuccessor(req, res) {
+
+        if(! requestJWTValid)
+        {
+            res.status(500).json({message: "token invalid"});
+            console.log('token on server invalid.');
+        }
+
         if (!devices[req.params.index]) {
             res.status(404).json({message: "Start device does not exist"});
         } else if (!devices[req.body.index]) {
@@ -175,6 +225,12 @@
      * @param res The response
      */
     function deleteSuccessor(req, res) {
+        if(! requestJWTValid)
+        {
+            res.status(500).json({message: "token invalid"});
+            console.log('token on server invalid.');
+        }
+        
         const device = devices[req.params.predecessor];
         if (device) {
             deleteArrayEntry(device.successors, +req.params.successor);
@@ -257,6 +313,11 @@
      * @param res The response
      */
     function changePassword(req, res) {
+        if(! requestJWTValid)
+        {
+            res.status(500).json({message: "token invalid"});
+            console.log('token on server invalid.');
+        }
         const oldPassword = req.body.oldPassword, newPassword = req.body.newPassword;
 
         if (!user) {
