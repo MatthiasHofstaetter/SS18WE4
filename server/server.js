@@ -91,17 +91,18 @@
      */
     function getAvailable(req, res) {
 
-        if(! requestJWTValid)
+        if(! requestJWTValid(req))
         {
             res.status(500).json({message: "token invalid"});
             console.log('token on server invalid.');
         }
-        
+        else{
 
-        if (!available) {
-            res.status(500).json({message: "Devices not loaded"});
-        } else {
-            res.status(200).json(available);
+            if (!available) {
+                res.status(500).json({message: "Devices not loaded"});
+            }   else {
+                res.status(200).json(available);
+            }
         }
     }
 
@@ -119,12 +120,14 @@
      * @param res The response
      */
     function getDevices(req, res) {
-        if(! requestJWTValid)
+        if(! requestJWTValid(req))
         {
             res.status(500).json({message: "token invalid"});
             console.log('token on server invalid.');
         }
-        res.status(200).json(Object.keys(devices).map(index => devices[index]));
+        else{
+            res.status(200).json(Object.keys(devices).map(index => devices[index]));
+        }
     }
 
     /**
@@ -134,24 +137,26 @@
      */
     function addDevice(req, res) {
 
-        if(! requestJWTValid)
+        if(! requestJWTValid(req))
         {
             res.status(500).json({message: "token invalid"});
             console.log('token on server invalid.');
         }
-
-        if (devices[req.body.index]) {
-            res.status(415).json({message: "Device already exists"});
-        } else {
-            devices[req.body.index] = {
-                index: req.body.index,
-                type: req.body.type,
-                title: req.body.title,
-                position: req.body.position,
-                control: req.body.control,
-                successors: req.body.successors || []
-            };
-            res.status(200).json({message: "Device added"});
+        else{
+            
+            if (devices[req.body.index]) {
+                res.status(415).json({message: "Device already exists"});
+            } else {
+                devices[req.body.index] = {
+                    index: req.body.index,
+                    type: req.body.type,
+                    title: req.body.title,
+                    position: req.body.position,
+                    control: req.body.control,
+                    successors: req.body.successors || []
+                };
+                res.status(200).json({message: "Device added"});
+            }
         }
     }
 
@@ -161,18 +166,20 @@
      * @param res The response
      */
     function deleteDevice(req, res) {
-        if(! requestJWTValid)
+        if(! requestJWTValid(req))
         {
             res.status(500).json({message: "token invalid"});
             console.log('token on server invalid.');
         }
+        else{
 
-        if (!devices[req.params.index]) {
-            res.status(404).json({message: "Device does not exist"});
-        } else {
-            delete devices[req.params.index];
-            Object.entries(devices).forEach(([key, device]) => deleteArrayEntry(device.successors, +req.params.index));
-            res.status(200).json({message: "Device deleted"});
+            if (!devices[req.params.index]) {
+                res.status(404).json({message: "Device does not exist"});
+            } else {
+                delete devices[req.params.index];
+                Object.entries(devices).forEach(([key, device]) => deleteArrayEntry(device.successors, +req.params.index));
+                res.status(200).json({message: "Device deleted"});
+            }
         }
     }
 
@@ -182,17 +189,19 @@
      * @param res The response
      */
     function moveDevice(req, res) {
-        if(! requestJWTValid)
+        if(! requestJWTValid(req))
         {
             res.status(500).json({message: "token invalid"});
             console.log('token on server invalid.');
         }
+        else{
 
-        if (!devices[req.params.index]) {
-            res.status(404).json({message: "Device does not exist"});
-        } else {
-            devices[req.params.index].position = req.body.position;
-            res.status(200).json({message: "Device position updated"});
+            if (!devices[req.params.index]) {
+                res.status(404).json({message: "Device does not exist"});
+            } else {
+                devices[req.params.index].position = req.body.position;
+                res.status(200).json({message: "Device position updated"});
+            }
         }
     }
 
@@ -203,19 +212,21 @@
      */
     function addSuccessor(req, res) {
 
-        if(! requestJWTValid)
+        if(! requestJWTValid(req))
         {
             res.status(500).json({message: "token invalid"});
             console.log('token on server invalid.');
         }
+        else{
 
-        if (!devices[req.params.index]) {
-            res.status(404).json({message: "Start device does not exist"});
-        } else if (!devices[req.body.index]) {
-            res.status(400).json({message: "End does not exist"});
-        } else {
-            devices[req.params.index].successors.push(req.body.index);
-            res.status(200).json({message: "Arrow added"});
+            if (!devices[req.params.index]) {
+                res.status(404).json({message: "Start device does not exist"});
+            } else if (!devices[req.body.index]) {
+                res.status(400).json({message: "End does not exist"});
+            } else {
+                devices[req.params.index].successors.push(req.body.index);
+                res.status(200).json({message: "Arrow added"});
+            }
         }
     }
 
@@ -225,17 +236,19 @@
      * @param res The response
      */
     function deleteSuccessor(req, res) {
-        if(! requestJWTValid)
+        if(! requestJWTValid(req))
         {
             res.status(500).json({message: "token invalid"});
             console.log('token on server invalid.');
         }
+        else{
         
-        const device = devices[req.params.predecessor];
-        if (device) {
-            deleteArrayEntry(device.successors, +req.params.successor);
+            const device = devices[req.params.predecessor];
+            if (device) {
+                deleteArrayEntry(device.successors, +req.params.successor);
+            }
+            res.status(200).json({message: "Arrow deleted"});
         }
-        res.status(200).json({message: "Arrow deleted"});
     }
 
     function deleteArrayEntry(array, entry) {
@@ -295,7 +308,6 @@
             res.status(401).json({message: "Bad credentials", errors: {credentials: true}});
         } else {
             jwt = createJWT(username);
-            console.log("verify gleich nach erzeugung von jwt am server in authenticate:");
             verifyJWT(jwt);
 
             console.log('Json Web Token: '+jwt);
@@ -313,30 +325,32 @@
      * @param res The response
      */
     function changePassword(req, res) {
-        if(! requestJWTValid)
+        if(! requestJWTValid(req))
         {
             res.status(500).json({message: "token invalid"});
             console.log('token on server invalid.');
         }
-        const oldPassword = req.body.oldPassword, newPassword = req.body.newPassword;
+        else{
+            const oldPassword = req.body.oldPassword, newPassword = req.body.newPassword;
 
-        if (!user) {
-            res.status(500).json({message: "User data not loaded"});
-        } else if (!oldPassword || !newPassword) {
-            res.status(400).json({message: "Bad request"});
-        } else if (oldPassword !== user.password) {
-            res.status(400).json({message: "Old password wrong", errors: {oldPassword: true}});
-        } else {
-            const data = `username: ${user.username}\npassword: ${newPassword}`;
-            fs.writeFile("./resources/login.config", data, {}, function(err) {
-                if (err) {
-                    console.log("Error writing user config: ", err);
-                    res.status(500).json({message: "Password could not be stored"});
-                } else {
-                    user.password = newPassword;
-                    res.status(200).json({message: "Password successfully updated"});
-                }
-            });
+            if (!user) {
+                res.status(500).json({message: "User data not loaded"});
+            } else if (!oldPassword || !newPassword) {
+                res.status(400).json({message: "Bad request"});
+            } else if (oldPassword !== user.password) {
+                res.status(400).json({message: "Old password wrong", errors: {oldPassword: true}});
+            } else {
+                const data = `username: ${user.username}\npassword: ${newPassword}`;
+                fs.writeFile("./resources/login.config", data, {}, function(err) {
+                    if (err) {
+                        console.log("Error writing user config: ", err);
+                        res.status(500).json({message: "Password could not be stored"});
+                    } else {
+                        user.password = newPassword;
+                        res.status(200).json({message: "Password successfully updated"});
+                    }
+                });
+            }
         }
     }
 
